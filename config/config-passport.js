@@ -46,7 +46,8 @@ passport.use(
     {
       clientID: GOOGLE_CLIENT_ID,
       clientSecret: GOOGLE_CLIENT_SECRET,
-      callbackURL: `${BASE_URL}/auth/google/callback`,
+      // callbackURL: 'http://localhost:3000/auth/google/callback',
+      callbackURL: `${BASE_URL}/auth/google/callback` ,
       state: true // !хз надо ли
     },
     function (accessToken, refreshToken, profile, done) {
@@ -54,7 +55,8 @@ passport.use(
       console.log('refreshToken:', refreshToken);
       // console.log('profile:', profile);
       console.log('profile:', JSON.stringify(profile, null, 2));
-       
+
+
          
          
          // Поиск или создание пользователя в базе данных по профилю Google

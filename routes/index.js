@@ -21,7 +21,7 @@ router.get('/', (req, res, next) => {
 
 // !auth with google+
 router.get('/auth/google',
-  passport.authenticate('google', { scope: ['profile'] }),
+  passport.authenticate('google', { scope: ['profile', 'email'] }),
   (req, res) => {
     // Этот код выполнится после успешного запуска аутентификации
     console.log('Redirected to Google for authentication');
@@ -34,6 +34,7 @@ router.get('/auth/google',
 // hand control to passport to use code to grab profile info
 router.get('/auth/google/callback', 
  passport.authenticate('google',{ failureRedirect: '/login' }), (req, res) => {
+  console.log('User email:', req.user.email);
   console.log('Callback success');
   res.redirect('/');
 });
