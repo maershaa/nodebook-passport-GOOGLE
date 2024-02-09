@@ -118,10 +118,34 @@ body {
 .form-control {
   margin-bottom: 5px;
 }
-.google-btn{
-  color: #fff;
-  text-decoration: none;
-  font-size: 18px;
-  padding: 10px;
-  background: #ff5353;
+
+.social-buttons {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex; 
 }
+
+.social-button-item {
+  margin-right: 10px; 
+}
+
+/* Стили для кнопок (если необходимо) */
+.btn {
+  text-decoration: none;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+}
+
+/* Дополнительные стили для Google+ кнопки (если необходимо) */
+.google-btn {
+  background-color: #dd4b39; /* Цвет Google+ */
+}
+
+/* Дополнительные стили для Facebook кнопки (если необходимо) */
+.facebook-btn {
+  background-color: #3b5998; /* Цвет Facebook */
+}
+
