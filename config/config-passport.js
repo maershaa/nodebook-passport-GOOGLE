@@ -70,7 +70,9 @@ passport.use(
             // Если пользователя нет, создать нового пользователя на основе профиля Google
             const newUser = new User({
               googleId: profile.id,
-              displayName: profile.displayName
+              displayName: profile.displayName,
+              username: profile.displayName,
+              email: profile.emails[0].value  
             });
 
             // Сохранить нового пользователя в базе данных

@@ -13,8 +13,12 @@ const userSchema = new Schema({
   },
   password: {
     type: String,
-    required: [false], // Обязательное поле с сообщением об ошибке, если не указано
+    required: function() {
+      // Требовать поле password только если пользователь не регистрируется через Google
+      return !this.googleId;
+    },
   },
+  googleId: String, // Идентификатор Google (поле, указывающее, что пользователь зарегистрирован через Google)
 });
 
 // Метод для установки пароля пользователя
