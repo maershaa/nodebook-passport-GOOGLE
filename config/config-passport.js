@@ -3,7 +3,7 @@ const LocalStrategy = require("passport-local").Strategy;
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const User = require("../schemas/user");
 require("dotenv").config();
-const { GOOGLE_CLIENT_SECRET, GOOGLE_CLIENT_ID } = process.env;
+const {BASE_URL, GOOGLE_CLIENT_SECRET, GOOGLE_CLIENT_ID } = process.env;
 
 // Сериализация пользователя (сохранение идентификатора пользователя в сессии)
 passport.serializeUser((user, done) => {
@@ -46,7 +46,7 @@ passport.use(
     {
       clientID: GOOGLE_CLIENT_ID,
       clientSecret: GOOGLE_CLIENT_SECRET,
-      callbackURL: 'http://localhost:3000/auth/google/callback',
+      callbackURL: `${BASE_URL}/auth/google/callback`,
       state: true // !хз надо ли
     },
     function (accessToken, refreshToken, profile, done) {
