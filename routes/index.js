@@ -25,6 +25,8 @@ router.get('/auth/google',
   (req, res) => {
     // Этот код выполнится после успешного запуска аутентификации
     console.log('Redirected to Google for authentication');
+    console.log('User email:', req.user ? req.user.email : 'No user');
+    console.log('User email:', req.user.email);
     // В этот момент пользователь уже перенаправлен на страницу входа Google
     // и обратный вызов Passport.js будет выполнен после успешной аутентификации
   }
@@ -34,8 +36,9 @@ router.get('/auth/google',
 // hand control to passport to use code to grab profile info
 router.get('/auth/google/callback', 
  passport.authenticate('google',{ failureRedirect: '/login' }), (req, res) => {
-  console.log('User email:', req.user.email);
   console.log('Callback success');
+  console.log('User email:', req.user ? req.user.email : 'No user');
+  console.log('User email:', req.user.email);
   res.redirect('/');
 });
 
@@ -77,7 +80,9 @@ router.post('/registration', async (req, res, next) => {
     await newUser.save(); // Сохранение пользователя в базе данных
     req.flash('message', 'Вы успешно зарегистрировались');
     res.redirect('/'); // Перенаправляем на главную страницу после успешной регистрации
-  } catch (e) {
+  } catch (e) {  
+    console.error(e);
+
     next(e); // Обработка ошибок при регистрации
   }
 });
