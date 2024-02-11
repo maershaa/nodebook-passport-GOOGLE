@@ -9,6 +9,10 @@
     integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous" />
   <link rel="stylesheet" href="/styles/style.css" />
   <title>Passport - Local Strategy</title>
+  <div id="fb-root"></div>
+
+  <!-- !встраивание Facebook SDK (Software Development Kit) в ваш веб-сайт -->
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/ru_RU/sdk.js#xfbml=1&version=v19.0&appId=919275876390187" nonce="mYH0Roab"></script>
 </head>
 
 <body class="text-center">
@@ -47,9 +51,11 @@
               <li class="social-button-item"> <a class="btn btn-lg btn-primary btn-block google-btn" type="button" href="/auth/google">Google+</a>
               </li>
               <!-- ! КНОПКА Facebook -->
-              <li class="social-button-item"> <a class="btn btn-lg btn-primary btn-block facebook-btn" type="button"
+              <li class="social-button-item fb-login-button" data-width="200" data-auto-logout-link="false" data-use-continue-as="true"> <a class="btn btn-lg btn-primary btn-block facebook-btn" type="button"
                   href="/auth/facebook">Facebook</a>
               </li>
+
+
             </ul>
 
 

@@ -1,9 +1,17 @@
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
+const FacebookStrategy = require("passport-facebook").Strategy;
 const User = require("../schemas/user");
 require("dotenv").config();
-const {BASE_URL, GOOGLE_CLIENT_SECRET, GOOGLE_CLIENT_ID } = process.env;
+
+const {
+  BASE_URL,
+  GOOGLE_CLIENT_SECRET,
+  GOOGLE_CLIENT_ID,
+  FACEBOOK_APP_ID,
+  FACEBOOK_APP_SECRET,
+} = process.env;
 
 // Сериализация пользователя (сохранение идентификатора пользователя в сессии)
 passport.serializeUser((user, done) => {
@@ -46,19 +54,15 @@ passport.use(
     {
       clientID: GOOGLE_CLIENT_ID,
       clientSecret: GOOGLE_CLIENT_SECRET,
-      callbackURL: `${BASE_URL}/auth/google/callback` ,
-      state: true // !хз надо ли
+      callbackURL: `${BASE_URL}/auth/google/callback`,
+      state: true, // !хз надо ли
     },
     function (accessToken, refreshToken, profile, done) {
-      console.log('accessToken:', accessToken);
-      console.log('refreshToken:', refreshToken);
+      console.log("accessToken:", accessToken);
+      console.log("refreshToken:", refreshToken);
       // console.log('profile:', profile);
-      console.log('profile:', JSON.stringify(profile, null, 2));
-
-
-         
-         
-         // Поиск или создание пользователя в базе данных по профилю Google
+      console.log("profile:", JSON.stringify(profile, null, 2));
+      // Поиск или создание пользователя в базе данных по профилю Google
       User.findOne({ googleId: profile.id })
         .then((currentUser) => {
           if (currentUser) {
@@ -71,7 +75,7 @@ passport.use(
               googleId: profile.id,
               displayName: profile.displayName,
               username: profile.displayName,
-              email: profile.emails[0].value  
+              email: profile.emails[0].value,
             });
 
             // Сохранить нового пользователя в базе данных
@@ -79,6 +83,52 @@ passport.use(
               .save()
               .then((user) => {
                 console.log("created new user: ", user);
+                done(null, user);
+              })
+              .catch((err) => {
+                console.error("Error saving new user:", err);
+                done(err);
+              });
+          }
+        })
+        .catch((err) => {
+          console.error("Error searching for user:", err);
+          done(err);
+        });
+    }
+  )
+);
+
+passport.use(
+  new FacebookStrategy(
+    {
+      clientID: FACEBOOK_APP_ID,
+      clientSecret: FACEBOOK_APP_SECRET,
+      callbackURL: "http://localhost:3000/auth/facebook/callback",
+      profileFields: ["id", "displayName", "photos", "email"],
+      enableProof: true,
+    },
+    function (accessToken, refreshToken, profile, done) {
+      console.log("Callback аутентификации через Facebook");
+      console.log("Профиль:", profile);
+      User.findOne({ facebookId: profile.id })
+        .then((currentUser) => {
+          if (currentUser) {
+            // If the user already exists, return the user
+            return done(null, currentUser);
+          } else {
+            // If the user does not exist, create a new user based on the Facebook profile
+            const newUser = new User({
+              facebookId: profile.id,
+              displayName: profile.displayName,
+              // Other properties like username, email, etc.
+            });
+
+            // Save the new user to the database
+            newUser
+              .save()
+              .then((user) => {
+                console.log("Created new user:", user);
                 done(null, user);
               })
               .catch((err) => {
